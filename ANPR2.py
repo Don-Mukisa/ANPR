@@ -6,7 +6,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 #resizing the image
-image = cv2.imread(r"C:\Users\DON\OneDrive\Desktop\TEST_IMAGES\images(2).jpeg")
+image = cv2.imread(r"C:\Users\DON\OneDrive\Desktop\TEST_IMAGES\download(2).png")
 image = imutils.resize(image, width=320 )
 cv2.imshow("original image", image)
 cv2.waitKey(0)
@@ -55,3 +55,14 @@ for c in cnts:
                 cv2.imwrite('./'+str(i)+'.png',new_img)
                 i+=1
                 break
+cv2.drawContours(image, [screenCnt], -1, (0, 255, 0), 3)
+cv2.imshow("image with detected license plate", image)
+cv2.waitKey(0)
+
+#Extracting text from the cropped plate
+Cropped_loc = './7.png'
+cv2.imshow("cropped", cv2.imread(Cropped_loc))
+plate = pytesseract.image_to_string(Cropped_loc, lang='eng')
+print("Number plate is:", plate)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
