@@ -1,13 +1,13 @@
 import cv2
-import pytesseract
+#import pytesseract
 import serial
 import numpy as np
 
 # Set the Tesseract executable path 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Open the serial connection
-ser = serial.Serial('COM3', 9600)
+ser = serial.Serial('COM5', 9600)
 
 # Function to read an image from the serial connection
 def read_image():
@@ -20,12 +20,18 @@ def read_image():
         data.append(row)
     img = np.array(data, dtype=np.uint8)
     return img
+img = read_image()
+cv2.imshow("original image", img)
+cv2.waitKey(0)
 
+
+'''
 # Function to process image
 def process_image(img):
     # Use OpenCV to process the image (e.g., grayscale, blur, edge detection)
     # This will depend on your specific requirements
-    processed_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #processed_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    processed_img = img
     return processed_img
 
 # Function to perform OCR with Tesseract
@@ -46,3 +52,4 @@ while True:
 
     # Print the extracted text
     print(text)
+'''
