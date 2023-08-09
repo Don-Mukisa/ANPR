@@ -1,20 +1,27 @@
 #include <Arduino_OV767X.h>
 
+int bytesPerFrame;
+
+byte data[320*240*2]; // QVGA: 320x240 X 2 bytes per pixel (RGB565)
+
 void setup() {
+  //Serial.begin(115200); // Baud rate for serial communication
   Serial.begin(9600);
-  if (!Camera.begin(QQVGA, GRAYSCALE)) { // start the camera
-    Serial.println("CAMERA INIT FAILED");
-    return;
+  while (!Serial);
+
+  if (!Camera.begin(QQVGA, GRAYSCALE, 1)) {
+    Serial.println("Failed to initialize camera!");
+    while (1);
   }
+
+  bytesPerFrame = Camera.width() * Camera.height() * Camera.bytesPerPixel();
+
+  // Optionally, enable the test pattern for testing
+  // Camera.testPattern();
 }
 
 void loop() {
-  Camera.readFrame();
-  for (int i = 0; i < Camera.width(); i++) {
-    for (int j = 0; j < Camera.height(); j++) {
-      byte pixel = Camera.getPixel(i, j);
-      Serial.write(pixel);
-    }
-  }
-  delay(1000); // delay between each frame
+  Camera.readFrame(data);
+
+  Serial.write(data, bytesPerFrame);
 }
